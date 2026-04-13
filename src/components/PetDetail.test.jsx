@@ -164,7 +164,8 @@ describe('PetDetail', () => {
       expect(screen.queryByRole('button', { name: /adopt/i })).not.toBeInTheDocument();
     });
 
-    expect(screen.getByText('Adopted')).toBeInTheDocument();
+    const adoptedTexts = screen.getAllByText('Adopted');
+    expect(adoptedTexts.length).toBeGreaterThanOrEqual(1);
   });
 
   it('shows error when adopt fails', async () => {
