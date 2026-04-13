@@ -1,0 +1,28 @@
+node_modules/
+dist/
+
+# Environment variables
+.env
+.env.*
+.env.local
+.env.production
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# Coverage
+coverage/
+
+# Vite
+*.local
