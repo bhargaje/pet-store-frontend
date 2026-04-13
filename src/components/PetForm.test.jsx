@@ -27,12 +27,12 @@ describe('PetForm', () => {
 
   it('renders all form fields with labels', () => {
     renderPetForm();
-    expect(screen.getByLabelText('Name')).toBeInTheDocument();
-    expect(screen.getByLabelText('Species')).toBeInTheDocument();
-    expect(screen.getByLabelText('Breed')).toBeInTheDocument();
-    expect(screen.getByLabelText('Age')).toBeInTheDocument();
-    expect(screen.getByLabelText('Price')).toBeInTheDocument();
-    expect(screen.getByLabelText('Description')).toBeInTheDocument();
+    expect(screen.getByLabelText(/Name/)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Species/)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Breed/)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Age/)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Price/)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Description/)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Add Pet' })).toBeInTheDocument();
   });
 
@@ -57,7 +57,7 @@ describe('PetForm', () => {
       expect(screen.getByText('Name is required')).toBeInTheDocument();
     });
 
-    fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Buddy' } });
+    fireEvent.change(screen.getByLabelText(/Name/), { target: { value: 'Buddy' } });
     expect(screen.queryByText('Name is required')).not.toBeInTheDocument();
   });
 
@@ -65,9 +65,9 @@ describe('PetForm', () => {
     ApiService.createPet.mockResolvedValue({ petId: 'new-1', name: 'Buddy' });
     renderPetForm();
 
-    fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Buddy' } });
-    fireEvent.change(screen.getByLabelText('Species'), { target: { value: 'Dog' } });
-    fireEvent.change(screen.getByLabelText('Price'), { target: { value: '299.99' } });
+    fireEvent.change(screen.getByLabelText(/Name/), { target: { value: 'Buddy' } });
+    fireEvent.change(screen.getByLabelText(/Species/), { target: { value: 'Dog' } });
+    fireEvent.change(screen.getByLabelText(/Price/), { target: { value: '299.99' } });
     fireEvent.click(screen.getByRole('button', { name: 'Add Pet' }));
 
     await waitFor(() => {
@@ -84,12 +84,12 @@ describe('PetForm', () => {
     ApiService.createPet.mockResolvedValue({ petId: 'new-2' });
     renderPetForm();
 
-    fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Whiskers' } });
-    fireEvent.change(screen.getByLabelText('Species'), { target: { value: 'Cat' } });
-    fireEvent.change(screen.getByLabelText('Breed'), { target: { value: 'Siamese' } });
-    fireEvent.change(screen.getByLabelText('Age'), { target: { value: '2' } });
-    fireEvent.change(screen.getByLabelText('Price'), { target: { value: '149.99' } });
-    fireEvent.change(screen.getByLabelText('Description'), { target: { value: 'A cute cat' } });
+    fireEvent.change(screen.getByLabelText(/Name/), { target: { value: 'Whiskers' } });
+    fireEvent.change(screen.getByLabelText(/Species/), { target: { value: 'Cat' } });
+    fireEvent.change(screen.getByLabelText(/Breed/), { target: { value: 'Siamese' } });
+    fireEvent.change(screen.getByLabelText(/Age/), { target: { value: '2' } });
+    fireEvent.change(screen.getByLabelText(/Price/), { target: { value: '149.99' } });
+    fireEvent.change(screen.getByLabelText(/Description/), { target: { value: 'A cute cat' } });
     fireEvent.click(screen.getByRole('button', { name: 'Add Pet' }));
 
     await waitFor(() => {
@@ -110,9 +110,9 @@ describe('PetForm', () => {
     });
     renderPetForm();
 
-    fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Buddy' } });
-    fireEvent.change(screen.getByLabelText('Species'), { target: { value: 'Dog' } });
-    fireEvent.change(screen.getByLabelText('Price'), { target: { value: '100' } });
+    fireEvent.change(screen.getByLabelText(/Name/), { target: { value: 'Buddy' } });
+    fireEvent.change(screen.getByLabelText(/Species/), { target: { value: 'Dog' } });
+    fireEvent.change(screen.getByLabelText(/Price/), { target: { value: '100' } });
     fireEvent.click(screen.getByRole('button', { name: 'Add Pet' }));
 
     await waitFor(() => {
@@ -124,9 +124,9 @@ describe('PetForm', () => {
     ApiService.createPet.mockRejectedValue(new Error('Network error'));
     renderPetForm();
 
-    fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Buddy' } });
-    fireEvent.change(screen.getByLabelText('Species'), { target: { value: 'Dog' } });
-    fireEvent.change(screen.getByLabelText('Price'), { target: { value: '100' } });
+    fireEvent.change(screen.getByLabelText(/Name/), { target: { value: 'Buddy' } });
+    fireEvent.change(screen.getByLabelText(/Species/), { target: { value: 'Dog' } });
+    fireEvent.change(screen.getByLabelText(/Price/), { target: { value: '100' } });
     fireEvent.click(screen.getByRole('button', { name: 'Add Pet' }));
 
     await waitFor(() => {
@@ -138,9 +138,9 @@ describe('PetForm', () => {
     ApiService.createPet.mockReturnValue(new Promise(() => {}));
     renderPetForm();
 
-    fireEvent.change(screen.getByLabelText('Name'), { target: { value: 'Buddy' } });
-    fireEvent.change(screen.getByLabelText('Species'), { target: { value: 'Dog' } });
-    fireEvent.change(screen.getByLabelText('Price'), { target: { value: '100' } });
+    fireEvent.change(screen.getByLabelText(/Name/), { target: { value: 'Buddy' } });
+    fireEvent.change(screen.getByLabelText(/Species/), { target: { value: 'Dog' } });
+    fireEvent.change(screen.getByLabelText(/Price/), { target: { value: '100' } });
     fireEvent.click(screen.getByRole('button', { name: 'Add Pet' }));
 
     await waitFor(() => {
