@@ -66,12 +66,10 @@ function PetDetail() {
     <div className="pet-detail">
       <Link to="/" className="btn-link">← Back to list</Link>
       <img src={getPetImage(pet.species, pet.breed)} alt={pet.name} className="pet-detail-img" />
-      <h2>
-        {pet.name}
-        <span className={`pet-card-status pet-card-status--${(pet.status || 'Available').toLowerCase()}`}>
-          {pet.status || 'Available'}
-        </span>
-      </h2>
+      <h2>{pet.name}</h2>
+      <span className={`pet-card-status pet-card-status--${(pet.status || 'Available').toLowerCase()}`}>
+        {pet.status || 'Available'}
+      </span>
       <div className="pet-detail-price">${pet.price}</div>
       <dl className="pet-detail-info">
         <div>
