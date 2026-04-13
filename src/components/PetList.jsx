@@ -50,6 +50,9 @@ function PetList() {
                 <span className="pet-card-price">${pet.price}</span>
               </div>
               <span className="pet-card-species">{pet.species}</span>
+              <span className={`pet-card-status pet-card-status--${(pet.status || 'Available').toLowerCase()}`}>
+                {pet.status || 'Available'}
+              </span>
               <div className="pet-card-details">
                 {pet.breed && <span>Breed: {pet.breed}</span>}
                 {pet.age !== undefined && <span>Age: {pet.age}y</span>}

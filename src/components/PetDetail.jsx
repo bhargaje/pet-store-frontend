@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import ApiService from '../services/ApiService';
 import { getPetImage } from '../utils/petImages';
@@ -26,6 +26,15 @@ function PetDetail() {
         setLoading(false);
       });
   }, [id]);
+
+  const handleAdopt = async () => {
+    try {
+      await ApiService.adoptPet(id);
+      setPet((prev) => ({ ...prev, status: 'Adopted' }));
+    } catch (err) {
+      setError(err.message || 'Failed to adopt pet');
+    }
+  };
 
   const handleDelete = async () => {
     try {
@@ -57,9 +66,18 @@ function PetDetail() {
     <div className="pet-detail">
       <Link to="/" className="btn-link">← Back to list</Link>
       <img src={getPetImage(pet.species, pet.breed)} alt={pet.name} className="pet-detail-img" />
-      <h2>{pet.name}</h2>
+      <h2>
+        {pet.name}
+        <span className={`pet-card-status pet-card-status--${(pet.status || 'Available').toLowerCase()}`}>
+          {pet.status || 'Available'}
+        </span>
+      </h2>
       <div className="pet-detail-price">${pet.price}</div>
       <dl className="pet-detail-info">
+        <div>
+          <dt>Status</dt>
+          <dd>{pet.status || 'Available'}</dd>
+        </div>
         <div>
           <dt>Species</dt>
           <dd>{pet.species}</dd>
@@ -77,6 +95,9 @@ function PetDetail() {
         <div className="pet-detail-description">{pet.description}</div>
       )}
       <div className="pet-detail-actions">
+        {(!pet.status || pet.status === 'Available') && (
+          <button onClick={handleAdopt} className="btn btn-adopt">Adopt</button>
+        )}
         <button onClick={handleDelete} className="btn btn-danger">Delete Pet</button>
       </div>
     </div>

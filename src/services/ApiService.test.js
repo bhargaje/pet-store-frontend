@@ -14,6 +14,7 @@ describe('ApiService', () => {
     mockAxiosInstance = {
       get: vi.fn(),
       post: vi.fn(),
+      put: vi.fn(),
       delete: vi.fn(),
     };
     axios.create.mockReturnValue(mockAxiosInstance);
@@ -106,6 +107,25 @@ describe('ApiService', () => {
       mockAxiosInstance.delete.mockRejectedValue(error);
 
       await expect(ApiService.deletePet('nonexistent')).rejects.toThrow('Not Found');
+    });
+  });
+
+  describe('adoptPet', () => {
+    it('calls PUT /pets/:id/adopt and returns data', async () => {
+      const adopted = { petId: 'abc', name: 'Buddy', status: 'Adopted' };
+      mockAxiosInstance.put.mockResolvedValue({ data: adopted });
+
+      const result = await ApiService.adoptPet('abc');
+
+      expect(mockAxiosInstance.put).toHaveBeenCalledWith('/pets/abc/adopt');
+      expect(result).toEqual(adopted);
+    });
+
+    it('propagates errors', async () => {
+      const error = new Error('Server Error');
+      mockAxiosInstance.put.mockRejectedValue(error);
+
+      await expect(ApiService.adoptPet('abc')).rejects.toThrow('Server Error');
     });
   });
 });

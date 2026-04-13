@@ -29,6 +29,11 @@ const ApiService = {
     const response = await apiClient.delete(`/pets/${id}`);
     return response.data;
   },
+
+  async adoptPet(id) {
+    const response = await apiClient.put(`/pets/${id}/adopt`);
+    return response.data;
+  },
 };
 
 export default ApiService;
