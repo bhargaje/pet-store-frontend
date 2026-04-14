@@ -32,8 +32,8 @@ describe('PetList', () => {
 
   it('renders pet cards with name, species, breed, age, price', async () => {
     const pets = [
-      { petId: '1', name: 'Buddy', species: 'Dog', breed: 'Golden Retriever', age: 3, price: 299.99 },
-      { petId: '2', name: 'Whiskers', species: 'Cat', breed: 'Siamese', age: 2, price: 149.99 },
+      { petId: '1', name: 'Buddy', species: 'Dog', breed: 'Golden Retriever', age: 3, price: 299.99, status: 'Available' },
+      { petId: '2', name: 'Whiskers', species: 'Cat', breed: 'Siamese', age: 2, price: 149.99, status: 'Available' },
     ];
     ApiService.getAllPets.mockResolvedValue(pets);
     renderPetList();
@@ -51,6 +51,36 @@ describe('PetList', () => {
     expect(screen.getByText('Breed: Siamese')).toBeInTheDocument();
     expect(screen.getByText('Age: 2')).toBeInTheDocument();
     expect(screen.getByText('Price: $149.99')).toBeInTheDocument();
+  });
+
+  it('renders status badge for each pet', async () => {
+    const pets = [
+      { petId: '1', name: 'Buddy', species: 'Dog', breed: 'Golden Retriever', age: 3, price: 299.99, status: 'Available' },
+      { petId: '2', name: 'Whiskers', species: 'Cat', breed: 'Siamese', age: 2, price: 149.99, status: 'Available' },
+    ];
+    ApiService.getAllPets.mockResolvedValue(pets);
+    renderPetList();
+
+    await waitFor(() => {
+      expect(screen.getByText('Buddy')).toBeInTheDocument();
+    });
+
+    const badges = screen.getAllByText('Available');
+    expect(badges.length).toBe(2);
+  });
+
+  it('renders Adopted status badge', async () => {
+    const pets = [
+      { petId: '1', name: 'Rex', species: 'Dog', breed: 'Poodle', age: 4, price: 199.99, status: 'Adopted' },
+    ];
+    ApiService.getAllPets.mockResolvedValue(pets);
+    renderPetList();
+
+    await waitFor(() => {
+      expect(screen.getByText('Rex')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText('Adopted')).toBeInTheDocument();
   });
 
   it('renders links to /pets/:id for each pet', async () => {

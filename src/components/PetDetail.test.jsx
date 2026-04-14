@@ -30,6 +30,7 @@ const samplePet = {
   age: 3,
   price: 299.99,
   description: 'A friendly dog',
+  status: 'Available',
 };
 
 describe('PetDetail', () => {
@@ -119,5 +120,78 @@ describe('PetDetail', () => {
     await waitFor(() => {
       expect(screen.getByRole('alert')).toHaveTextContent('Error: Delete failed');
     });
+  });
+
+  it('shows Adopt button for available pets', async () => {
+    ApiService.getPetById.mockResolvedValue(samplePet);
+    renderPetDetail();
+
+    await waitFor(() => {
+      expect(screen.getByText('Buddy')).toBeInTheDocument();
+    });
+
+    expect(screen.getByRole('button', { name: /adopt/i })).toBeInTheDocument();
+  });
+
+  it('hides Adopt button for adopted pets', async () => {
+    const adoptedPet = { ...samplePet, status: 'Adopted' };
+    ApiService.getPetById.mockResolvedValue(adoptedPet);
+    renderPetDetail();
+
+    await waitFor(() => {
+      expect(screen.getByText('Buddy')).toBeInTheDocument();
+    });
+
+    expect(screen.queryByRole('button', { name: /adopt/i })).not.toBeInTheDocument();
+  });
+
+  it('adopts pet and updates UI on success', async () => {
+    ApiService.getPetById.mockResolvedValue(samplePet);
+    ApiService.adoptPet.mockResolvedValue({ ...samplePet, status: 'Adopted' });
+    renderPetDetail();
+
+    await waitFor(() => {
+      expect(screen.getByText('Buddy')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /adopt/i }));
+
+    await waitFor(() => {
+      expect(ApiService.adoptPet).toHaveBeenCalledWith('test-id');
+    });
+
+    await waitFor(() => {
+      expect(screen.queryByRole('button', { name: /adopt/i })).not.toBeInTheDocument();
+    });
+
+    const adoptedTexts = screen.getAllByText('Adopted');
+    expect(adoptedTexts.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('shows error when adopt fails', async () => {
+    ApiService.getPetById.mockResolvedValue(samplePet);
+    ApiService.adoptPet.mockRejectedValue(new Error('Adopt failed'));
+    renderPetDetail();
+
+    await waitFor(() => {
+      expect(screen.getByText('Buddy')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /adopt/i }));
+
+    await waitFor(() => {
+      expect(screen.getByRole('alert')).toHaveTextContent('Error: Adopt failed');
+    });
+  });
+
+  it('shows status in pet details', async () => {
+    ApiService.getPetById.mockResolvedValue(samplePet);
+    renderPetDetail();
+
+    await waitFor(() => {
+      expect(screen.getByText('Buddy')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText('Status')).toBeInTheDocument();
   });
 });
